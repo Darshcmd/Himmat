@@ -3,6 +3,7 @@
 # Himmat: By Darsh
 
 ### Helping JEE and Indian exam students stay strong before burnout begins.
+### This project is mostly vibecoded and was my submission for PromptWars 2026 GDG Jaipur Hackathon
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)]()
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)]()
