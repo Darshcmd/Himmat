@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Activity,
   Brain,
@@ -18,8 +18,10 @@ import { analyzeWellness, type WellnessAnalysis, type WellnessInput } from "@/li
 import { cn } from "@/lib/utils";
 
 const trend = [42, 48, 45, 58, 52, 61, 57];
+const targetExams = ["JEE Main / Advanced", "NEET UG", "CUET", "Board Exams", "UPSC / NDA / Other Indian Exams"];
 
 const defaultInput: WellnessInput = {
+  targetExam: "JEE Main / Advanced",
   sleepHours: 5.8,
   studyHours: 10,
   moodScore: 5,
@@ -106,6 +108,17 @@ function RangeField({
 }
 
 function PanicMode({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose, open]);
+
   if (!open) return null;
 
   return (
@@ -114,6 +127,7 @@ function PanicMode({ open, onClose }: { open: boolean; onClose: () => void }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="panic-title"
+        aria-describedby="panic-description"
         className="w-full max-w-xl rounded-lg border border-cyan-200/20 bg-slate-950 p-6 shadow-2xl"
       >
         <div className="flex items-start gap-3">
@@ -124,8 +138,8 @@ function PanicMode({ open, onClose }: { open: boolean; onClose: () => void }) {
             <h2 id="panic-title" className="text-2xl font-semibold text-white">
               60-second reset
             </h2>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              You are having a hard moment, not a failed day. Step away from the study table if you can.
+            <p id="panic-description" className="mt-2 text-sm leading-6 text-slate-300">
+              You are having a hard moment, not a failed day. Step away from the study table, coaching material, or mock paper if you can.
             </p>
           </div>
         </div>
@@ -170,10 +184,10 @@ export function HimmatDashboard() {
             <div className="flex flex-col justify-center">
               <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-200">Himmat: By Darsh</p>
               <h1 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-6xl">
-                Helping students stay strong before burnout begins.
+                Helping JEE and Indian exam students stay strong before burnout begins.
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                Predict burnout risk from sleep, study load, mood, exam pressure, mock scores, screen time, and journal signals.
+                Predict burnout risk from sleep, coaching load, mood, JEE/NEET/CUET pressure, mock scores, screen time, and journal signals.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -197,8 +211,8 @@ export function HimmatDashboard() {
             <div className="rounded-lg border border-white/10 bg-slate-950/45 p-6 shadow-2xl backdrop-blur">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-400">Burnout risk</p>
-                  <p className="mt-2 text-6xl font-semibold">{analysis.burnoutRisk}</p>
+                  <p className="text-sm text-slate-400">Burnout risk for {input.targetExam}</p>
+                  <p className="mt-2 text-6xl font-semibold" aria-live="polite">{analysis.burnoutRisk}</p>
                 </div>
                 <div className={cn("rounded-full px-3 py-1 text-sm font-semibold", riskTone === "rose" ? "bg-rose-300/15 text-rose-100" : riskTone === "amber" ? "bg-amber-300/15 text-amber-100" : riskTone === "emerald" ? "bg-emerald-300/15 text-emerald-100" : "bg-cyan-300/15 text-cyan-100")}>
                   {analysis.category}
@@ -221,16 +235,30 @@ export function HimmatDashboard() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <MetricCard label="Focus score" value={`${analysis.focusScore}%`} helper="Ability to sustain deep work today." icon={Brain} tone="cyan" />
             <MetricCard label="Recovery score" value={`${analysis.recoveryScore}%`} helper="Sleep and break readiness for tomorrow." icon={Moon} tone="emerald" />
-            <MetricCard label="Exam readiness" value={`${analysis.examReadiness}%`} helper={`${input.daysUntilExam} days until the next exam.`} icon={CalendarClock} tone="amber" />
+            <MetricCard label="Exam readiness" value={`${analysis.examReadiness}%`} helper={`${input.daysUntilExam} days until ${input.targetExam}.`} icon={CalendarClock} tone="amber" />
             <MetricCard label="Mood trend" value={`${input.moodScore}/10`} helper={analysis.journalSignals.join(", ")} icon={TrendingUp} tone={riskTone} />
           </div>
         </section>
 
         <section id="check-in" className="mx-auto grid max-w-7xl gap-6 px-4 pb-12 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <form className="rounded-lg border border-white/10 bg-white/[0.06] p-6 backdrop-blur" onSubmit={(event) => event.preventDefault()}>
-            <h2 className="text-2xl font-semibold">Student signal check-in</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-400">Adjust the demo signals and Himmat recalculates locally in your browser.</p>
+            <h2 className="text-2xl font-semibold">Indian student signal check-in</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-400">Adjust JEE, NEET, CUET, Boards, or other Indian exam signals. Himmat recalculates locally in your browser.</p>
             <div className="mt-6 space-y-5">
+              <label className="block">
+                <span className="text-sm font-medium text-slate-200">Target exam</span>
+                <select
+                  value={input.targetExam}
+                  onChange={(event) => setInput({ ...input, targetExam: event.target.value })}
+                  className="mt-2 w-full rounded-lg border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none transition focus:border-cyan-200"
+                >
+                  {targetExams.map((exam) => (
+                    <option key={exam} value={exam}>
+                      {exam}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <RangeField label="Sleep hours" min={0} max={12} step={0.1} value={input.sleepHours} suffix="h" onChange={(sleepHours) => setInput({ ...input, sleepHours })} />
               <RangeField label="Study hours" min={0} max={16} value={input.studyHours} suffix="h" onChange={(studyHours) => setInput({ ...input, studyHours })} />
               <RangeField label="Mood score" min={1} max={10} value={input.moodScore} suffix="/10" onChange={(moodScore) => setInput({ ...input, moodScore })} />
@@ -244,7 +272,7 @@ export function HimmatDashboard() {
                   maxLength={800}
                   onChange={(event) => setInput({ ...input, journalEntry: event.target.value })}
                   className="mt-2 min-h-28 w-full rounded-lg border border-white/10 bg-slate-950/70 p-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-200"
-                  placeholder="Write what studying felt like today."
+                  placeholder="Write what studying, coaching, mocks, or school felt like today."
                 />
               </label>
             </div>

@@ -5,16 +5,16 @@ export default function AboutPage() {
     <main className="min-h-screen bg-[#07111f] text-white">
       <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-200">About Himmat</p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl">Predictive wellness for exam pressure.</h1>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl">Predictive wellness for Indian exam pressure.</h1>
         <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-          Himmat helps competitive exam students notice burnout risk before it becomes a shutdown. It turns everyday signals into a practical recovery plan without pretending to be a therapist or a generic chatbot.
+          Himmat helps JEE aspirants and Indian students preparing for NEET, CUET, Boards, UPSC, NDA, CA, and other exams notice burnout risk before it becomes a shutdown. It turns everyday signals into a practical recovery plan without pretending to be a therapist or a generic chatbot.
         </p>
 
         <div className="mt-12 grid gap-4 md:grid-cols-3">
           {[
             {
               title: "Student-first",
-              text: "Built around sleep, mock tests, study hours, journal tone, screen time, and exam countdowns.",
+              text: "Built around sleep, coaching hours, mock tests, PYQs, school pressure, journal tone, screen time, and exam countdowns.",
               icon: GraduationCap,
             },
             {

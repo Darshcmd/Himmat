@@ -4,12 +4,12 @@ import { ArrowRight, Brain, CalendarCheck, HeartPulse, ShieldCheck } from "lucid
 const features = [
   {
     title: "Burnout risk engine",
-    text: "Scores sleep, study load, mood, screens, mock performance, exam proximity, and journal tone.",
+    text: "Scores sleep, coaching load, mood, screens, mock performance, exam proximity, and journal tone.",
     icon: Brain,
   },
   {
     title: "Exam readiness",
-    text: "Combines focus, recovery, and mock-test signals into one student-friendly dashboard.",
+    text: "Combines focus, recovery, and mock-test signals for JEE, NEET, CUET, Boards, and other Indian exams.",
     icon: CalendarCheck,
   },
   {
@@ -35,7 +35,7 @@ export default function Home() {
               Helping students stay strong before burnout begins.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              A premium predictive wellness dashboard for competitive exam students, built to spot risk early and turn pressure into a calmer next plan.
+              A premium predictive wellness dashboard for JEE aspirants and Indian students preparing for NEET, CUET, Boards, UPSC, NDA, CA, and other high-pressure exams.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -63,7 +63,7 @@ export default function Home() {
               <span className="rounded-full bg-amber-300/15 px-3 py-1 text-sm font-semibold text-amber-100">64 risk</span>
             </div>
             <div className="mt-8 grid grid-cols-2 gap-3">
-              {["5.8h sleep", "10h study", "28 days", "64% mock"].map((item) => (
+              {["JEE Main", "5.8h sleep", "10h study", "64% mock"].map((item) => (
                 <div key={item} className="rounded-lg border border-white/10 bg-white/[0.06] p-4 text-sm text-slate-200">
                   {item}
                 </div>
@@ -72,7 +72,7 @@ export default function Home() {
             <div className="mt-6 rounded-lg border border-cyan-200/20 bg-cyan-300/10 p-4">
               <p className="text-sm font-semibold text-cyan-100">Tomorrow&apos;s correction</p>
               <p className="mt-2 text-sm leading-6 text-slate-300">
-                Three focused blocks, one error-log review, protected sleep cutoff, and a real break after every third cycle.
+                Three focused JEE blocks, one PYQ/error-log review, protected sleep cutoff, and a real break after every third cycle.
               </p>
             </div>
           </div>

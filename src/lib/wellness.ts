@@ -1,6 +1,7 @@
 export type RiskCategory = "Low" | "Medium" | "High" | "Critical";
 
 export type WellnessInput = {
+  targetExam: string;
   sleepHours: number;
   studyHours: number;
   moodScore: number;
@@ -38,15 +39,20 @@ export type WellnessAnalysis = {
 };
 
 const KEYWORDS: Record<SentimentSignal, string[]> = {
-  stress: ["stress", "pressure", "overload", "exhausted", "tired", "burden"],
-  anxiety: ["anxious", "anxiety", "panic", "worried", "fear", "nervous"],
-  frustration: ["frustrated", "angry", "stuck", "irritated", "annoyed", "can't focus"],
-  motivation: ["motivated", "hope", "trying", "progress", "disciplined", "improve"],
-  hopelessness: ["hopeless", "worthless", "give up", "nothing works", "can't do this"],
-  confidence: ["confident", "ready", "clear", "calm", "strong", "prepared"],
+  stress: ["stress", "pressure", "overload", "exhausted", "tired", "burden", "coaching pressure"],
+  anxiety: ["anxious", "anxiety", "panic", "worried", "fear", "nervous", "rank tension"],
+  frustration: ["frustrated", "angry", "stuck", "irritated", "annoyed", "can't focus", "backlog"],
+  motivation: ["motivated", "hope", "trying", "progress", "disciplined", "improve", "consistent"],
+  hopelessness: ["hopeless", "worthless", "give up", "nothing works", "can't do this", "no selection"],
+  confidence: ["confident", "ready", "clear", "calm", "strong", "prepared", "pyq"],
 };
 
 const clamp = (value: number, min = 0, max = 100) => Math.min(max, Math.max(min, value));
+
+const toBoundedNumber = (value: unknown, fallback: number, min: number, max: number) => {
+  const parsed = Number(value);
+  return clamp(Number.isFinite(parsed) ? parsed : fallback, min, max);
+};
 
 const sanitizeText = (value: string) =>
   value
@@ -66,12 +72,13 @@ export function analyzeJournal(rawEntry: string): SentimentSignal[] {
 
 export function normalizeWellnessInput(input: Partial<WellnessInput>): WellnessInput {
   return {
-    sleepHours: clamp(Number(input.sleepHours ?? 6.5), 0, 12),
-    studyHours: clamp(Number(input.studyHours ?? 8), 0, 16),
-    moodScore: clamp(Number(input.moodScore ?? 6), 1, 10),
-    screenTime: clamp(Number(input.screenTime ?? 6), 0, 18),
-    mockTestScore: clamp(Number(input.mockTestScore ?? 68), 0, 100),
-    daysUntilExam: clamp(Number(input.daysUntilExam ?? 45), 0, 365),
+    targetExam: sanitizeText(String(input.targetExam ?? "JEE Main / Advanced")).slice(0, 80) || "JEE Main / Advanced",
+    sleepHours: toBoundedNumber(input.sleepHours, 6.5, 0, 12),
+    studyHours: toBoundedNumber(input.studyHours, 8, 0, 16),
+    moodScore: toBoundedNumber(input.moodScore, 6, 1, 10),
+    screenTime: toBoundedNumber(input.screenTime, 6, 0, 18),
+    mockTestScore: toBoundedNumber(input.mockTestScore, 68, 0, 100),
+    daysUntilExam: toBoundedNumber(input.daysUntilExam, 45, 0, 365),
     journalEntry: sanitizeText(String(input.journalEntry ?? "")),
   };
 }
@@ -82,6 +89,11 @@ export function analyzeWellness(rawInput: Partial<WellnessInput>): WellnessAnaly
   const factors: string[] = [];
 
   let risk = 20;
+
+  if (/jee|neet|cuet|boards|upsc|nda|ca|indian/i.test(input.targetExam) && input.daysUntilExam <= 45 && input.studyHours >= 8) {
+    risk += 4;
+    factors.push(`${input.targetExam} preparation needs a recovery buffer`);
+  }
 
   if (input.sleepHours < 6) {
     risk += (6 - input.sleepHours) * 8;
@@ -153,16 +165,16 @@ export function analyzeWellness(rawInput: Partial<WellnessInput>): WellnessAnaly
     recoveryPlan: {
       tomorrowStudyPlan:
         category === "Critical"
-          ? "Two 45-minute revision blocks only: one formula/notes pass and one easy confidence set."
-          : "Three 75-minute blocks: weak topic, timed practice, and error-log revision.",
+          ? `Two 45-minute ${input.targetExam} blocks only: one formula/NCERT or notes pass and one easy confidence set.`
+          : `Three 75-minute ${input.targetExam} blocks: weak concept, timed PYQ/mock practice, and error-log revision.`,
       sleepTarget: input.sleepHours < 7 ? "Target 7.5 hours with screens off 45 minutes before bed." : "Protect your current sleep window and keep wake time consistent.",
       breakSchedule: "Use 50/10 cycles. After three cycles, take a 30-minute meal or movement break.",
       recoveryActivity: category === "Low" ? "Ten minutes of mobility or a walk after the final session." : "Twenty minutes away from screens: walk, shower, breathing, or music.",
       motivationNote: "You do not need a perfect day. You need one steady next block.",
       examPreparationCorrection:
         input.mockTestScore < 60
-          ? "Do fewer new questions tomorrow and spend more time repairing repeated errors."
-          : "Keep practice timed, but close the loop by rewriting mistakes in one-line rules.",
+          ? `For ${input.targetExam}, do fewer new questions tomorrow and repair repeated errors with solved examples before timed practice.`
+          : `For ${input.targetExam}, keep practice timed, but close the loop by rewriting mistakes in one-line rules.`,
     },
   };
 }

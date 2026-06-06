@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 
 const QUESTIONS = [
   "How rested do you feel after last night's sleep?",
-  "How sustainable does today's study load feel?",
+  "How sustainable does today's school, coaching, or self-study load feel?",
   "How steady is your mood right now?",
-  "How confident do you feel after recent mock tests?",
+  "How confident do you feel after recent JEE, NEET, CUET, Board, or other mock tests?",
   "How well are you taking breaks away from screens?",
   "How prepared do you feel for the next exam milestone?",
 ];
