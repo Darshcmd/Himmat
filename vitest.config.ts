@@ -9,7 +9,14 @@ export default defineConfig({
   },
   test: {
     coverage: {
-      include: ["src/app/api/analyze/route.ts", "src/components/Survey/SurveyForm.tsx", "src/lib/wellness.ts"],
+      include: [
+        "src/app/api/analyze/route.ts",
+        "src/app/manifest.ts",
+        "src/components/Dashboard/PanicMode.tsx",
+        "src/components/Dashboard/dashboard-data.ts",
+        "src/components/Survey/SurveyForm.tsx",
+        "src/lib/wellness.ts",
+      ],
       provider: "v8",
       reporter: ["text", "json", "html"],
     },

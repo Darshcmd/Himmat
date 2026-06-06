@@ -7,4 +7,16 @@
 - Improved input safety so invalid numbers cannot become bad scores.
 - Improved journal detection for coaching pressure, backlog, rank tension, and PYQs.
 - Improved panic mode accessibility with Escape key support and dialog description.
-- Kept `README.md` unchanged.
+- Split the dashboard into smaller focused files for better code quality.
+- Lazy-loaded panic mode so it is not in the first dashboard bundle.
+- Added strict API checks for JSON content type, payload size, object shape, and journal length.
+- Added security headers and production configuration in `next.config.ts`.
+- Fixed the remaining audit issue by pinning PostCSS to the patched version.
+- Added more API edge-case tests for non-JSON, oversized payloads, oversized journals, and invalid shapes.
+- Updated Browserslist data so production builds no longer show the stale browser database warning.
+- Added rich metadata, Open Graph, Twitter metadata, viewport theme color, and app manifest.
+- Added stronger security headers, including HSTS.
+- Removed the experimental package optimization warning from production builds.
+- Improved Panic Mode with focus management and background scroll lock.
+- Added tests for the app manifest and Panic Mode accessibility behavior.
+- Rewrote `README.md` as a judge-facing project guide with real verification evidence.
