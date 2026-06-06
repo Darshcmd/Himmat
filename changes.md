@@ -20,3 +20,4 @@
 - Improved Panic Mode with focus management and background scroll lock.
 - Added tests for the app manifest and Panic Mode accessibility behavior.
 - Rewrote `README.md` as a judge-facing project guide with real verification evidence.
+- Added a clear README section listing the exact automated test cases covered.

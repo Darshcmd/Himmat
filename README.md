@@ -261,15 +261,36 @@ Security headers include:
 Current verified results:
 
 ```text
-Test Files: 4 passed
-Tests:      14 passed
-Statements: 98.26%
+Test Files: 6 passed
+Tests:      17 passed
+Statements: 98.5%
 Branches:   89.58%
 Functions:  100%
-Lines:      99%
+Lines:      99.13%
 Audit:      0 vulnerabilities
 Build:      passed
 ```
+
+## Test Cases Covered
+
+The automated suite checks the important product and judging paths:
+
+- high-risk JEE burnout detection
+- stable low-risk student scenario
+- unsafe numeric input normalization
+- journal sentiment detection for coaching pressure, backlog, rank tension, and PYQ language
+- `/api/analyze` valid wellness analysis response
+- invalid JSON rejection
+- non-JSON content-type rejection
+- oversized request body rejection
+- oversized journal rejection before sanitization
+- JSON array / invalid payload shape rejection
+- survey check-in flow and dashboard redirect
+- accessible survey answer button labels
+- dashboard exam defaults and risk-tone mapping
+- panic mode dialog rendering, focus behavior, and Escape-key close
+- closed panic mode rendering nothing
+- web app manifest name, theme color, and icon metadata
 
 Commands:
 
@@ -294,7 +315,7 @@ npm run check
 | Code Quality | Modular components, strict TypeScript, reusable wellness engine, focused tests |
 | Security | 0 audit vulnerabilities, no secrets, strict API validation, CSP/security headers |
 | Efficiency | Static routes, local scoring, lazy panic mode, clean production build |
-| Testing | 14 automated tests, 99% line coverage, API and UI tests |
+| Testing | 17 automated tests, 99.13% line coverage, API, UI, manifest, and accessibility behavior tests |
 | Accessibility | labeled controls, dialog semantics, keyboard support, high contrast, responsive UI |
 | Problem Alignment | JEE and Indian exam mental-health focus, coaching/backlog/rank/PYQ language |
 
